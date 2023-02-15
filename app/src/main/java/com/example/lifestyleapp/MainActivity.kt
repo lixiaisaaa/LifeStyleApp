@@ -15,7 +15,7 @@ import java.net.URI
 
 
 class MainActivity : AppCompatActivity() {
-
+    //updated
     lateinit var age_Input: EditText
     lateinit var name_Input: EditText
     lateinit var sexual_Input: EditText
