@@ -34,7 +34,7 @@ tools:context=".MainActivity">
             android:gravity="right"
             android:text="Photo"
             android:layout_below="@id/image"
-            android:layout_marginLeft="313dp"
+            android:layout_marginLeft="580dp"
             />
 
         <TextView
@@ -90,7 +90,7 @@ tools:context=".MainActivity">
             android:drawablePadding="5dp"
             android:freezesText="true"
             android:gravity="start"
-            android:hint="Height in Meters"
+            android:hint="Height*"
             android:inputType="text"
             android:saveEnabled="false"
             android:textColorHint="#8e9094"
@@ -106,7 +106,7 @@ tools:context=".MainActivity">
             android:drawablePadding="5dp"
             android:freezesText="true"
             android:gravity="start"
-            android:hint="Weight in KG"
+            android:hint="Weight*"
             android:inputType="text"
             android:saveEnabled="false"
             android:textColorHint="#8e9094"

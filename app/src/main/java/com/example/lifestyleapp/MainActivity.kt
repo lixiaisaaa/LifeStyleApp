@@ -1,5 +1,6 @@
 package com.example.lifestyleapp
 
+import android.content.ActivityNotFoundException
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -8,74 +9,145 @@ import android.widget.EditText
 import android.widget.ImageView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import android.content.ContentValues
-import androidx.core.net.toFile
-import java.io.File
-import java.net.URI
+import android.content.Intent
+import android.graphics.Bitmap
+import android.os.Build
+import android.provider.MediaStore
+import android.view.View
+import android.widget.Toast
+import androidx.core.graphics.drawable.toBitmap
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() ,View.OnClickListener{
     //updated
-    lateinit var age_Input: EditText
-    lateinit var name_Input: EditText
-    lateinit var sexual_Input: EditText
-    lateinit var height_Input: EditText
-    lateinit var weight_Input: EditText
-    lateinit var city_Input: EditText
-    lateinit var country_Input: EditText
-    //lateinit var save_bnt: Button
-    lateinit var activity_Level: EditText
+    private var age_Input: EditText? = null
+    private var name_Input: EditText? = null
+    private var height_Input: EditText? = null
+    private var weight_Input: EditText? = null
+    private var mButtonCamera: Button? = null
+    private var mButtonSubmit: Button? = null
+
+    //pics
     private lateinit var takePicLauncher: ActivityResultLauncher<String>
     private lateinit var imageView: ImageView
-    private val db by lazy {
-        MyDBHelper(this, "info.db").writableDatabase
-    }
 
-//    var photo : Uri? = null
-//    var bitMap : Bitmap? = null
+    //Data store
+    private var mStringName: String? = null
+    private var mStringAge: String? = null
+    private var mHeight: String? = null
+    private var mWeight: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        age_Input = findViewById(R.id.age_Box)
-        name_Input = findViewById(R.id.name_Box)
-        sexual_Input = findViewById(R.id.sexual_Box)
-        weight_Input = findViewById(R.id.weight_Box)
-        height_Input = findViewById(R.id.height_Box)
-        city_Input = findViewById(R.id.city_Box)
-        country_Input = findViewById(R.id.country_Box)
-        activity_Level = findViewById(R.id.activity_Box)
+        age_Input = findViewById(R.id.et_Age)
+        name_Input = findViewById(R.id.et_Name)
+        height_Input = findViewById(R.id.et_Height)
+        weight_Input = findViewById(R.id.et_Weight)
         imageView = findViewById(R.id.image)
 
+        mButtonCamera = findViewById(R.id.button_pic)
+        mButtonSubmit = findViewById(R.id.button_submit)
 
         takePicLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) {
             Log.d("MainActivity", "onCreate: uri=$it, ")
             imageView.setImageURI(it)
         }
 
+        mButtonCamera!!.setOnClickListener(this)
+        mButtonSubmit!!.setOnClickListener(this)
+
         imageView.setOnClickListener {
             takePicLauncher.launch("image/*")
         }
 
-        // db operation
-        with(db) {
-            insert(
-                MyDBHelper.DB_TABLE,
-                null,
-                ContentValues().apply {
-                    put("name", name_Input.text.toString())
-                    put("age", age_Input.text.toString())
-                    put("sex", sexual_Input.text.toString())
-                    put("location", weight_Input.text.toString())
-                    put("height", height_Input.text.toString())
-                    put("weight", weight_Input.text.toString())
-                    put("activitylevel", activity_Level.text.toString())
-                }
-            )
-            close()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        mStringName = name_Input!!.text.toString()
+        mStringAge = age_Input!!.text.toString()
+        mHeight = height_Input!!.text.toString()
+        mWeight = weight_Input!!.text.toString()
+
+
+        outState.putString("NM_TEXT",mStringName)
+        outState.putString("AG_TEXT",mStringAge)
+        outState.putString("HT_TEXT",mHeight)
+        outState.putString("WT_TEXT",mWeight)
+
+
+        if(imageView!!.drawable != null){
+            outState.putParcelable("BITMAP",imageView!!.drawable.toBitmap())
+        }
+        //outState.putParcelable("BITMAP",mBitmap)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        name_Input!!.setText(savedInstanceState.getString("NM_TEXT"))
+        age_Input!!.setText(savedInstanceState.getString("AG_TEXT"))
+        height_Input!!.setText(savedInstanceState.getString("HT_TEXT"))
+        weight_Input!!.setText(savedInstanceState.getString("WT_TEXT"))
+
+
+        if(Build.VERSION.SDK_INT >= 33){
+            imageView!!.setImageBitmap(savedInstanceState.getParcelable("BITMAP", Bitmap::class.java))
+        }else{
+            imageView!!.setImageBitmap(savedInstanceState.getParcelable("BITMAP"))
         }
 
+    }
+
+    override fun onClick(view: View?) {
+        when(view?.id){
+            R.id.button_pic ->{
+                //The button press should open a camera
+                val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                try{
+                    cameraActivity.launch(cameraIntent)
+                }catch(ex: ActivityNotFoundException){
+                    //Do error handling here
+                }
+            }
+            R.id.button_submit ->{
+                height_Input = findViewById(R.id.et_Height)
+                weight_Input = findViewById(R.id.et_Weight)
+
+                mHeight = height_Input!!.text.toString()
+                mWeight = weight_Input!!.text.toString()
+
+                if(mHeight.isNullOrBlank() || mWeight.isNullOrBlank()){
+                    Toast.makeText(this@MainActivity, "enter both height and weight", Toast.LENGTH_SHORT).show()
+                }else{
+                    Toast.makeText(this@MainActivity, "Welcome!\"", Toast.LENGTH_SHORT).show()
+
+                    val messageIntent = Intent(this, BMI::class.java)
+                    messageIntent.putExtra("HT_STRING", mHeight)
+                    messageIntent.putExtra("WT_STRING", mWeight)
+                    this.startActivity(messageIntent)
+                }
+            }
+        }
+    }
+    private val cameraActivity = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
+        if(result.resultCode == RESULT_OK) {
+
+            imageView = findViewById(R.id.image)
+
+            if (Build.VERSION.SDK_INT >= 33) {
+                val thumbnailImage = result.data!!.getParcelableExtra("data", Bitmap::class.java)
+                imageView!!.setImageBitmap(thumbnailImage)
+            }
+            else{
+                val thumbnailImage = result.data!!.getParcelableExtra<Bitmap>("data")
+                imageView!!.setImageBitmap(thumbnailImage)
+            }
+
+
+        }
     }
 
 
