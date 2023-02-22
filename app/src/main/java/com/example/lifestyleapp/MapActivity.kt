@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.example.lifestyleapp.MainActivity.Companion.PERMISSIONS_REQUEST_LOCATION
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -95,6 +94,10 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
         }
 
+    }
+
+    companion object {
+        const val PERMISSIONS_REQUEST_LOCATION = 100
     }
 }
 
