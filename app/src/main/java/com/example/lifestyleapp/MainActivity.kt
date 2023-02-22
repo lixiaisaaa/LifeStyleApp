@@ -1,5 +1,6 @@
 package com.example.lifestyleapp
 
+import android.Manifest
 import android.content.ActivityNotFoundException
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,6 +11,7 @@ import android.widget.ImageView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Build
 import android.provider.MediaStore
@@ -18,7 +20,10 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
+import com.example.lifestyleapp.MapActivity.Companion.PERMISSIONS_REQUEST_LOCATION
 
 const val age_text = "AG_TEXT"
 const val name_text = "NM_TEXT"
@@ -41,6 +46,7 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
     private var mButtonCamera: Button? = null
     private var mButtonBMR: Button? = null
     private var mButtonPro: Button? = null
+    private var mButtonHikes: Button? = null
 
     //pics
     private lateinit var takePicLauncher: ActivityResultLauncher<String>
@@ -81,6 +87,7 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
         mButtonCamera = findViewById(R.id.button_pic)
         mButtonBMR = findViewById(R.id.button_BMR)
         mButtonPro = findViewById(R.id.button_Profile)
+        mButtonHikes = findViewById(R.id.button_hikes)
 
         takePicLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) {
             Log.d("MainActivity", "onCreate: uri=$it, ")
@@ -93,6 +100,19 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
 
         imageView.setOnClickListener {
             takePicLauncher.launch("image/*")
+        }
+
+        mButtonHikes!!.setOnClickListener {
+            // request permission
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                    PERMISSIONS_REQUEST_LOCATION)
+            } else {
+                // User has already granted location permission, open MapActivity
+                startActivity(Intent(this, realMap::class.java))
+            }
         }
 
     }
