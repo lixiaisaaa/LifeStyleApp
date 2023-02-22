@@ -1,5 +1,6 @@
 package com.example.lifestyleapp
 
+import android.Manifest
 import android.content.ActivityNotFoundException
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,11 +11,14 @@ import android.widget.ImageView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Build
 import android.provider.MediaStore
 import android.view.View
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 
 
@@ -26,6 +30,7 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
     private var weight_Input: EditText? = null
     private var mButtonCamera: Button? = null
     private var mButtonSubmit: Button? = null
+    private var mButtonHikes: Button? = null
 
     //pics
     private lateinit var takePicLauncher: ActivityResultLauncher<String>
@@ -49,6 +54,7 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
 
         mButtonCamera = findViewById(R.id.button_pic)
         mButtonSubmit = findViewById(R.id.button_submit)
+        mButtonHikes = findViewById(R.id.button_hikes)
 
         takePicLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) {
             Log.d("MainActivity", "onCreate: uri=$it, ")
@@ -60,6 +66,19 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
 
         imageView.setOnClickListener {
             takePicLauncher.launch("image/*")
+        }
+
+        mButtonHikes!!.setOnClickListener {
+            // request permission
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                    PERMISSIONS_REQUEST_LOCATION)
+            } else {
+                // User has already granted location permission, open MapActivity
+                startActivity(Intent(this, realMap::class.java))
+            }
         }
 
     }
@@ -150,5 +169,19 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
         }
     }
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == PERMISSIONS_REQUEST_LOCATION) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Location permission granted, open MapActivity
+                startActivity(Intent(this, MapActivity::class.java))
+            } else {
+                Toast.makeText(this, "Location permission required to show hikes", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+    companion object {
+        const val PERMISSIONS_REQUEST_LOCATION = 100
+    }
 
 }

@@ -14,7 +14,6 @@ tools:context=".MainActivity">
         android:layout_height="match_parent"
         >
 
-
         <ImageView
             android:id="@+id/image"
             android:layout_width="100dp"
@@ -124,6 +123,18 @@ tools:context=".MainActivity">
             android:textColor="@color/white"
             android:textSize="20dp"
             android:gravity="center"/>
+
+        <Button
+            android:id="@+id/button_hikes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="630dp"
+            android:layout_marginRight="230dp"
+            android:gravity="center"
+            android:text="hikes"
+            android:textColor="@color/white"
+            android:textSize="20dp" />
     </RelativeLayout>
 
 <!--EditText with id editText-->
