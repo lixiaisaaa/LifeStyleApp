@@ -14,17 +14,16 @@ tools:context=".MainActivity">
         android:layout_height="match_parent"
         >
 
-
         <ImageView
             android:id="@+id/image"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
-            android:background="@color/purple_200"
             android:scaleType="fitXY"
             android:text="Select A Photo"
             android:layout_gravity="right"
+            android:src="@drawable/ic_launcher_foreground"
             />
         <Button
             android:id="@+id/button_pic"
@@ -37,6 +36,32 @@ tools:context=".MainActivity">
             android:layout_marginLeft="313dp"
             />
 
+        <EditText
+            android:id="@+id/et_sex"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginRight="120dp"
+            android:drawablePadding="5dp"
+            android:gravity="start"
+            android:hint="Sexual*"
+            android:inputType="text"
+            android:textColorHint="#8e9094"
+            android:textCursorDrawable="@null"
+            android:saveEnabled="false"
+            android:freezesText="true"/>
+
+        <AutoCompleteTextView
+            android:id="@+id/autoComplete_act"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/et_sex"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="120dp"
+            android:hint="Activity Level*"
+            />
         <TextView
             android:id="@+id/display_txt"
             android:layout_width="wrap_content"
@@ -112,18 +137,77 @@ tools:context=".MainActivity">
             android:textColorHint="#8e9094"
             android:textCursorDrawable="@null" />
 
-
-        <Button
-            android:id="@+id/button_submit"
+        <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Submit"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="470dp"
+            android:layout_marginRight="40dp"
+            android:drawablePadding="5dp"
+            android:freezesText="true"
+            android:gravity="start"
+            android:hint="Country*"
+            android:inputType="text"
+            android:saveEnabled="false"
+            android:textColorHint="#8e9094"
+            android:textCursorDrawable="@null"
+            />
+
+        <EditText
+            android:id="@+id/et_Country"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="470dp"
+            android:layout_marginRight="40dp"
+            android:drawablePadding="5dp"
+            android:gravity="start"
+            android:inputType="text"
+            android:textColorHint="#8e9094"
+            android:textCursorDrawable="@null"
+            />
+
+        <EditText
+            android:id="@+id/et_City"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="540dp"
+            android:layout_marginRight="40dp"
+            android:drawablePadding="5dp"
+            android:freezesText="true"
+            android:gravity="start"
+            android:hint="City*"
+            android:inputType="text"
+            android:saveEnabled="false"
+            android:textColorHint="#8e9094"
+            android:textCursorDrawable="@null"
+            />
+
+        <Button
+            android:id="@+id/button_BMR"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="BMR"
             android:layout_marginRight="40dp"
             android:layout_marginLeft="40dp"
-            android:layout_marginTop="550dp"
+            android:layout_marginTop="610dp"
             android:textColor="@color/white"
             android:textSize="20dp"
             android:gravity="center"/>
+        <Button
+            android:id="@+id/button_Profile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Profile"
+            android:layout_marginRight="40dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="670dp"
+            android:textColor="@color/white"
+            android:textSize="20dp"
+            android:gravity="center"/>
+
+
     </RelativeLayout>
 
 <!--EditText with id editText-->
