@@ -22,11 +22,22 @@
         <activity
             android:name=".realMap"
             android:exported="false"
-            android:label="@string/title_activity_real_map" />
+            android:label="@string/title_activity_real_map" >
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".MainActivity" />
+        </activity>
+
         <activity
             android:name=".MapActivity"
             android:exported="false"
-            android:label="@string/title_activity_map" />
+            android:label="@string/title_activity_map" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+
+        </activity>
+
         <activity
             android:name=".Profile"
             android:label="Profile"
@@ -34,7 +45,7 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
-            />
+
         </activity>
         <activity
             android:name=".BMR"
