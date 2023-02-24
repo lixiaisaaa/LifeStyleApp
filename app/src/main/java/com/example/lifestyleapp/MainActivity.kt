@@ -21,7 +21,6 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
-import com.example.lifestyleapp.MapActivity.Companion.PERMISSIONS_REQUEST_LOCATION
 
 const val age_text = "AG_TEXT"
 const val name_text = "NM_TEXT"
@@ -107,7 +106,7 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
                 != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this,
                     arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                    PERMISSIONS_REQUEST_LOCATION)
+                    100)
             } else {
                 // User has already granted location permission, open MapActivity
                 startActivity(Intent(this, realMap::class.java))

@@ -29,33 +29,15 @@
         </activity>
 
         <activity
-            android:name=".MapActivity"
-            android:exported="false"
-            android:label="@string/title_activity_map" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
-
-        </activity>
-
-        <activity
             android:name=".Profile"
             android:label="Profile"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+            android:parentActivityName=".MainActivity"/>
 
-        </activity>
         <activity
             android:name=".BMR"
             android:label="BMI"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+            android:parentActivityName=".MainActivity"/>
             />
-        </activity>
         <activity
             android:name=".MainActivity"
             android:exported="true">
