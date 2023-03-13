@@ -57,7 +57,7 @@
             android:layout_marginLeft="313dp"
             />
 
-        <EditText
+        <Spinner
             android:id="@+id/et_sex"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -85,7 +85,7 @@
             />
 
 
-        <EditText
+        <Spinner
             android:id="@+id/autoComplete_act"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -126,7 +126,7 @@
             android:drawablePadding="5dp"
             android:freezesText="true"
             android:gravity="start"
-            android:hint="Height in Meters"
+            android:hint="Height in CM"
             android:inputType="text"
             android:saveEnabled="false"
             android:textColorHint="#8e9094"

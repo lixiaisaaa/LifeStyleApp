@@ -5,9 +5,6 @@ import android.content.ActivityNotFoundException
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import android.content.Intent
@@ -16,11 +13,11 @@ import android.graphics.Bitmap
 import android.os.Build
 import android.provider.MediaStore
 import android.view.View
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
+import com.google.gson.internal.bind.ReflectiveTypeAdapterFactory.Adapter
 
 const val age_text = "AG_TEXT"
 const val name_text = "NM_TEXT"
@@ -39,8 +36,8 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
     private var name_Input: EditText? = null
     private var height_Input: EditText? = null
     private var weight_Input: EditText? = null
-    private var sex_Input: EditText? = null
-    private var activity_Input: EditText? = null
+    private var sex_Input: Spinner? = null
+    private var activity_Input: Spinner? = null
     private var mButtonCamera: Button? = null
     private var mButtonBMR: Button? = null
     private var mButtonPro: Button? = null
@@ -63,17 +60,28 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
     private var mlvl: String? = null
     private var mIntake:String? = null
 
-    //private var suggestions_Act = arrayOf("High","Medium","Low")
+    private val sexual = arrayOf("Male","Female")
+    private val actLvlSpinner = arrayOf("Sedentary (little or no exercise)","Lightly active (light exercise/work 1-3 days per week)"
+        ,"Moderately active (moderate exercise/work 3-5 days per week)","Very active (hard exercise/work 6-7 days a week)",
+    "Extra active (very hard exercise/work 6-7 days a week)")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        sex_Input = findViewById(R.id.et_sex)
+        val arrayAdapter = ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item,sexual)
+        sex_Input!!.adapter = arrayAdapter
+
+        activity_Input = findViewById(R.id.autoComplete_act)
+        val arrayAdapter1 = ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item,actLvlSpinner)
+        activity_Input!!.adapter = arrayAdapter1
+
         age_Input = findViewById(R.id.et_Age)
         name_Input = findViewById(R.id.et_Name)
         height_Input = findViewById(R.id.et_Height)
         weight_Input = findViewById(R.id.et_Weight)
-        sex_Input = findViewById(R.id.et_sex)
+
         activity_Input = findViewById(R.id.autoComplete_act)
         country_Input = findViewById(R.id.et_Country)
         city_Input = findViewById(R.id.et_City)
@@ -122,10 +130,10 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
         mStringAge = age_Input!!.text.toString()
         mHeight = height_Input!!.text.toString()
         mWeight = weight_Input!!.text.toString()
-        mSexual = sex_Input!!.text.toString()
+        //mSexual = sex_Input!!.text.toString()
         mCountry = country_Input!!.text.toString()
         mCity = city_Input!!.text.toString()
-        mlvl = activity_Input!!.text.toString()
+        //mlvl = activity_Input!!.text.toString()
         mIntake = tv_intake!!.text.toString()
 
         outState.putString(name_text,mStringName)
@@ -151,10 +159,10 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
         age_Input!!.setText(savedInstanceState.getString(age_text))
         height_Input!!.setText(savedInstanceState.getString(height_text))
         weight_Input!!.setText(savedInstanceState.getString(weight_text))
-        sex_Input!!.setText(savedInstanceState.getString(sex_text))
+        //sex_Input!!.setText(savedInstanceState.getString(sex_text))
         city_Input!!.setText(savedInstanceState.getString(city_text))
         country_Input!!.setText(savedInstanceState.getString(country_text))
-        activity_Input!!.setText(savedInstanceState.getString(activity_text))
+        //activity_Input!!.setText(savedInstanceState.getString(activity_text))
         tv_intake!!.text = savedInstanceState.getString(activity_textView)
 
         if(Build.VERSION.SDK_INT >= 33){
@@ -180,9 +188,9 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
 
                 mHeight = height_Input!!.text.toString()
                 mWeight = weight_Input!!.text.toString()
-                mSexual = sex_Input!!.text.toString()
+                mSexual = sex_Input!!.selectedItem.toString()
                 mStringAge = age_Input!!.text.toString()
-                mlvl = activity_Input!!.text.toString()
+                mlvl = activity_Input!!.selectedItem.toString()
 
                 var weightV = 0.0
                 var heightV = 0.0
@@ -200,21 +208,21 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
 
                 var bmr = ""
                 var amr = ""
-                if(mSexual == "Men"){
+                if(mSexual == "Male"){
                     bmr = String.format("%.3f", 88.362 + (13.397 * weightV) + (4.799 * heightV) - (5.677 * ageV))
-                }else if(mSexual == "Women"){
+                }else if(mSexual == "Female"){
                     bmr = String.format("%.3f", 447.593 + (9.247 * weightV) + (3.098 * heightV) - (4.330 * ageV))
                 }
 
-                if(mlvl == "S"){
+                if(mlvl == "Sedentary (little or no exercise)"){
                     amr = String.format("%.3f", bmr.toDouble() * 1.2)
-                }else if(mlvl == "Lightly active "){
+                }else if(mlvl == "Lightly active (light exercise/work 1-3 days per week)"){
                     amr = String.format("%.3f", bmr.toDouble() * 1.375)
-                }else if(mlvl == "Moderately active"){
+                }else if(mlvl == "Moderately active (moderate exercise/work 3-5 days per week)"){
                     amr = String.format("%.3f", bmr.toDouble() * 1.55)
-                }else if(mlvl == "Active"){
+                }else if(mlvl == "Very active (hard exercise/work 6-7 days a week)"){
                     amr = String.format("%.3f", bmr.toDouble() * 1.725)
-                }else if(mlvl == "Very activity"){
+                }else if(mlvl == "Extra active (very hard exercise/work 6-7 days a week)"){
                     amr = String.format("%.3f", bmr.toDouble() * 1.9)
                 }
 
@@ -250,11 +258,11 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
                 mStringName = name_Input!!.text.toString()
                 mHeight = height_Input!!.text.toString()
                 mWeight = weight_Input!!.text.toString()
-                mSexual = sex_Input!!.text.toString()
+                //mSexual = sex_Input!!.text.toString()
                 mStringAge = age_Input!!.text.toString()
                 mCity = city_Input!!.text.toString()
                 mCountry = country_Input!!.text.toString()
-                mlvl = activity_Input!!.text.toString()
+                mlvl = activity_Input!!.selectedItem.toString()
 
                 if(mStringName.isNullOrBlank()){
                     Toast.makeText(this@MainActivity, "at least enter your name", Toast.LENGTH_SHORT).show()
@@ -280,7 +288,7 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
 
                 mHeight = height_Input!!.text.toString()
                 mWeight = weight_Input!!.text.toString()
-                mSexual = sex_Input!!.text.toString()
+                mSexual = sex_Input!!.selectedItem.toString()
                 mStringAge = age_Input!!.text.toString()
 
                 var weightV = 0.0
@@ -301,9 +309,9 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
                 if(mHeight.isNullOrBlank() || mWeight.isNullOrBlank() || mStringAge.isNullOrBlank() || mSexual.isNullOrBlank()){
                     Toast.makeText(this@MainActivity, "enter all height, weight, age and sex", Toast.LENGTH_SHORT).show()
                 }else{
-                    if(mSexual == "Men"){
+                    if(mSexual == "Male"){
                         bmr = String.format("%.3f", 88.362 + (13.397 * weightV) + (4.799* heightV) - (5.677*ageV))
-                    }else if(mSexual == "Women"){
+                    }else if(mSexual == "Female"){
                         bmr = String.format("%.3f", 447.593 + (9.247 * weightV) + (3.098* heightV) - (4.330*ageV))
                     }
                     Toast.makeText(this@MainActivity, "Welcome!\"", Toast.LENGTH_SHORT).show()
