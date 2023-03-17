@@ -17,6 +17,7 @@ class WeatherActivity : AppCompatActivity() , View.OnClickListener{
     private  var mStringCity: String? = null
     private  var backButton: Button? = null
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(android.R.style.Theme_Wallpaper_NoTitleBar);
         val receivedIntent = intent
 
         mStringCity = receivedIntent.getStringExtra(city_text)
