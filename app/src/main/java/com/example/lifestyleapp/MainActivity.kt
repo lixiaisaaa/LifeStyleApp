@@ -2,22 +2,21 @@ package com.example.lifestyleapp
 
 import android.Manifest
 import android.content.ActivityNotFoundException
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.util.Log
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Build
+import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import android.widget.*
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
-import com.google.gson.internal.bind.ReflectiveTypeAdapterFactory.Adapter
 
 const val age_text = "AG_TEXT"
 const val name_text = "NM_TEXT"
@@ -268,7 +267,7 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
                 mStringName = name_Input!!.text.toString()
                 mHeight = height_Input!!.text.toString()
                 mWeight = weight_Input!!.text.toString()
-                //mSexual = sex_Input!!.text.toString()
+                mSexual = sex_Input!!.selectedItem.toString()
                 mStringAge = age_Input!!.text.toString()
                 mCity = city_Input!!.text.toString()
                 mCountry = country_Input!!.text.toString()
