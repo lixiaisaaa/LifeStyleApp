@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:fillViewport="true"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <TextView
+            android:id="@+id/display_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enter Your Information"
+            android:textSize="50px"
+            android:textColor="@color/black"
+            android:layout_alignParentTop = "true"
+            android:layout_centerHorizontal = "true"
+            android:layout_marginRight="40dp"
+            />
+        <TextView
+            android:id="@+id/intake"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Calories intake"
+            android:layout_below="@id/et_City"
+            android:layout_marginLeft="200dp"
+            android:textSize="20dp"
+
+            />
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:scaleType="fitXY"
+            android:text="Select A Photo"
+            android:layout_gravity="right"
+            android:src="@drawable/ic_launcher_foreground"
+            />
+
+        <Button
+            android:id="@+id/button_pic"
+            android:layout_width="109dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/image"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="1182dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="0dp"
+            android:gravity="right"
+            android:text="Photo" />
+
+        <Spinner
+            android:id="@+id/et_sex"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="200dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginRight="120dp"
+            android:drawablePadding="5dp"
+            android:gravity="start"
+            android:hint="Sexual*(Men or Women)"
+            android:inputType="text"
+            android:textColorHint="#8e9094"
+            android:textCursorDrawable="@null"
+            android:saveEnabled="false"
+            android:freezesText="true"/>
+
+        <EditText
+            android:id="@+id/et_Name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/et_sex"
+            android:layout_marginLeft="200dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="120dp"
+            android:hint="Name*"
+            />
+
+
+        <Spinner
+            android:id="@+id/autoComplete_act"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="200dp"
+            android:layout_marginTop="180dp"
+            android:layout_marginRight="40dp"
+            android:drawablePadding="5dp"
+            android:gravity="start"
+            android:hint="Activity Level*"
+            android:inputType="text"
+            android:textColorHint="#8e9094"
+            android:textCursorDrawable="@null"
+            android:saveEnabled="false"
+            android:freezesText="true"/>
+
+        <EditText
+            android:id="@+id/et_Age"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Age*"
+            android:textCursorDrawable="@null"
+            android:textColorHint="#8e9094"
+            android:drawablePadding="5dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginLeft="200dp"
+            android:layout_marginTop="250dp"
+            android:gravity="start"
+            android:saveEnabled="false"
+            android:freezesText="true"/>
+
+        <EditText
+            android:id="@+id/et_Height"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="200dp"
+            android:layout_marginTop="320dp"
+            android:layout_marginRight="40dp"
+            android:drawablePadding="5dp"
+            android:freezesText="true"
+            android:gravity="start"
+            android:hint="Height in CM"
+            android:inputType="text"
+            android:saveEnabled="false"
+            android:textColorHint="#8e9094"
+            android:textCursorDrawable="@null" />
+
+        <EditText
+            android:id="@+id/et_Weight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="200dp"
+            android:layout_marginTop="390dp"
+            android:layout_marginRight="40dp"
+            android:drawablePadding="5dp"
+            android:freezesText="true"
+            android:gravity="start"
+            android:hint="Weight in KG"
+            android:inputType="text"
+            android:saveEnabled="false"
+            android:textColorHint="#8e9094"
+            android:textCursorDrawable="@null" />
+
+        <EditText
+            android:id="@+id/et_Country"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="200dp"
+            android:layout_marginTop="470dp"
+            android:layout_marginRight="40dp"
+            android:drawablePadding="5dp"
+            android:gravity="start"
+            android:inputType="text"
+            android:textColorHint="#8e9094"
+            android:textCursorDrawable="@null"
+            android:hint="Country*"
+            />
+
+        <EditText
+            android:id="@+id/et_City"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="200dp"
+            android:layout_marginTop="540dp"
+            android:layout_marginRight="40dp"
+            android:drawablePadding="5dp"
+            android:freezesText="true"
+            android:gravity="start"
+            android:hint="City*"
+            android:inputType="text"
+            android:saveEnabled="false"
+            android:textColorHint="#8e9094"
+            android:textCursorDrawable="@null"
+            />
+
+        <Button
+            android:id="@+id/button_BMR"
+            android:layout_width="161dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/button_calculate"
+            android:layout_marginTop = "70dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="1130dp"
+            android:gravity="center"
+            android:text="BMR"
+            android:textColor="@color/white"
+            android:textSize="20dp"
+
+            />
+
+        <Button
+            android:id="@+id/button_Profile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/button_hikes"
+            android:layout_marginTop = "70dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="1130dp"
+            android:gravity="center"
+            android:text="Profile"
+            android:textColor="@color/white"
+            android:textSize="20dp" />
+
+        <Button
+            android:id="@+id/button_hikes"
+            android:layout_width="165dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/button_BMR"
+            android:layout_marginTop = "70dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="1130dp"
+            android:text="hikes"
+            android:textSize="20dp" />
+
+        <Button
+            android:id="@+id/button_weather"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/button_Profile"
+            android:layout_marginTop = "70dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="1130dp"
+            android:gravity="center"
+            android:text="Weather" />
+
+        <Button
+            android:id="@+id/button_calculate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="1130dp"
+            android:text="calculate" />
+
+    </RelativeLayout>
+
+<!--EditText with id editText-->
+</ScrollView>
