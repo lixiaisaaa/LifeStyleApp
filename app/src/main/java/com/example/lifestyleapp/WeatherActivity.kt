@@ -1,75 +1,32 @@
 package com.example.lifestyleapp
 
-import android.Manifest
-import android.content.ActivityNotFoundException
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
-import android.util.Log
 import android.view.View
 import android.widget.*
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.toBitmap
+import androidx.fragment.app.Fragment
 
 class WeatherActivity : AppCompatActivity() , View.OnClickListener{
     //updated
 
 
-    private var mButtonBMR: Button? = null
-    private var mButtonPro: Button? = null
-    private var mButtonHikes: Button? = null
-    private var mButtonCalculate: Button?=null
-
-
-
-
-    //Data store
-
-
-    private var mCountry: String? = null
-    private var mCity: String? = null
-
 
     //private var suggestions_Act = arrayOf("High","Medium","Low")
-
+    private var weatherFragment: Fragment? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_weather)
-
-
-        mButtonBMR = findViewById(R.id.button_BMR)
-        mButtonPro = findViewById(R.id.button_Profile)
-        mButtonHikes = findViewById(R.id.button_hikes)
-        mButtonCalculate = findViewById(R.id.button_calculate)
-
-
-
-
-        mButtonBMR!!.setOnClickListener(this)
-        mButtonPro!!.setOnClickListener(this)
-        mButtonCalculate!!.setOnClickListener(this)
-
-
-        mButtonHikes!!.setOnClickListener {
-            // request permission
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this,
-                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                    MapActivity.PERMISSIONS_REQUEST_LOCATION
-                )
-            } else {
-                // User has already granted location permission, open MapActivity
-                startActivity(Intent(this, realMap::class.java))
-            }
+        if (savedInstanceState != null) {
+            weatherFragment = supportFragmentManager.findFragmentByTag("weather_frag")
+        } else {
+            val weatherFragment = WeatherFragment()
+            val fTrans = supportFragmentManager.beginTransaction()
+            fTrans.replace(R.id.fl_frag_weather, weatherFragment, "weather_frag")
+            fTrans.commit()
         }
+
+
+
 
     }
 
@@ -82,8 +39,7 @@ class WeatherActivity : AppCompatActivity() , View.OnClickListener{
 
 
 
-        outState.putString(country_text,mCountry)
-        outState.putString(city_text,mCity)
+
 
 
 
