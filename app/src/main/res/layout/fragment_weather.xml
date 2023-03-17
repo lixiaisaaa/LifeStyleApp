@@ -39,6 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/ll"
         android:layout_alignParentLeft="true"
+        android:textColor="@color/black"
         />
 
     <TextView
@@ -47,6 +48,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_temp"
         android:layout_alignParentLeft="true"
+        android:textColor="@color/black"
         />
 
     <TextView
@@ -55,6 +57,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_pressure"
         android:layout_alignParentLeft="true"
+        android:textColor="@color/black"
         />
 
     <TextView
@@ -63,6 +66,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_humidity"
         android:layout_alignParentLeft="true"
+        android:textColor="@color/black"
         />
 
     <TextView
@@ -71,6 +75,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_wind_speed"
         android:layout_alignParentLeft="true"
+        android:textColor="@color/black"
         />
 
 </RelativeLayout>

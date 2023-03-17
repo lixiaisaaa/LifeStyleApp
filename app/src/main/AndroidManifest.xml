@@ -23,15 +23,29 @@
             android:name=".realMap"
             android:exported="false"
             android:label="@string/title_activity_real_map" >
+
+
         <meta-data
             android:name="android.support.PARENT_ACTIVITY"
             android:value=".MainActivity" />
         </activity>
 
         <activity
+            android:name=".WeatherActivity"
+            android:exported="false"
+            android:label="WeatherActivity" >
+
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+
+        <activity
             android:name=".Profile"
             android:label="Profile"
             android:parentActivityName=".MainActivity"/>
+
 
         <activity
             android:name=".BMR"

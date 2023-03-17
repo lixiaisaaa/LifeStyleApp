@@ -31,7 +31,7 @@ class Profile : AppCompatActivity() {
         mStringAge = receivedIntent.getStringExtra(age_text)!!.replace("^\\s+".toRegex(), "")
         mHeight =  receivedIntent.getStringExtra(height_text)!!.replace("^\\s+".toRegex(), "")
         mWeight = receivedIntent.getStringExtra(weight_text)!!.replace("^\\s+".toRegex(), "")
-        mSexual = receivedIntent.getStringExtra(sex_text)!!.replace("^\\s+".toRegex(), "")
+        //mSexual = receivedIntent.getStringExtra(sex_text)!!.replace("^\\s+".toRegex(), "")
         mCountry = receivedIntent.getStringExtra(country_text)!!.replace("^\\s+".toRegex(), "")
         mCity = receivedIntent.getStringExtra(city_text)!!.replace("^\\s+".toRegex(), "")
         mlvl = receivedIntent.getStringExtra(activity_text)!!.replace("^\\s+".toRegex(), "")
