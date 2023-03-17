@@ -72,7 +72,7 @@ class realMap : AppCompatActivity(), OnMapReadyCallback {
             return
         }
 
-        // Mark
+        // Markl
         val myLocation = LatLng(location.latitude, location.longitude)
         val markerOptions = MarkerOptions()
             .position(myLocation)

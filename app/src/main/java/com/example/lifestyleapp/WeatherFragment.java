@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.os.HandlerCompat;
 import androidx.fragment.app.Fragment;
-
+import android.util.Log;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 
@@ -26,13 +27,16 @@ import java.util.concurrent.Executors;
 
 public class WeatherFragment extends Fragment implements View.OnClickListener{
 
+
     private EditText mEtLocation;
     private TextView mTvTemp;
     private TextView mTvPress;
     private TextView mTvHum;
     private WeatherData mWeatherData;
     private Button mBtSubmit;
+
     private static FetchWeatherTask mFetchWeatherTask = new FetchWeatherTask();
+
 
     public WeatherFragment() {
         // Required empty public constructor
@@ -41,6 +45,8 @@ public class WeatherFragment extends Fragment implements View.OnClickListener{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        String strCity = getArguments().getString("city");
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_weather, container, false);
         //Get the edit text and all the text views
@@ -48,10 +54,16 @@ public class WeatherFragment extends Fragment implements View.OnClickListener{
         mTvTemp = (TextView) view.findViewById(R.id.tv_temp);
         mTvPress = (TextView) view.findViewById(R.id.tv_pressure);
         mTvHum = (TextView) view.findViewById(R.id.tv_humidity);
+
+
+
         if(savedInstanceState!=null) {
+            String Lo = savedInstanceState.getString("loc");
             String temp = savedInstanceState.getString("tvTemp");
             String hum = savedInstanceState.getString("tvHum");
             String press = savedInstanceState.getString("tvPress");
+            if( Lo != null)
+                mEtLocation.setText(Lo);
             if (temp != null)
                 mTvTemp.setText(""+temp);
             if (hum != null)
@@ -59,6 +71,10 @@ public class WeatherFragment extends Fragment implements View.OnClickListener{
             if (press != null)
                 mTvPress.setText(""+press);
         }
+
+        mEtLocation.setText(strCity);
+
+
         mFetchWeatherTask.setWeakReference(this); //make sure we're always pointing to current version of fragment
         mBtSubmit = (Button) view.findViewById(R.id.button_submit);
         mBtSubmit.setOnClickListener(this);
@@ -66,12 +82,14 @@ public class WeatherFragment extends Fragment implements View.OnClickListener{
     }
     @Override
     public void onClick(View view) {
+
         switch(view.getId()){
             case R.id.button_submit:{
                 //Get the string from the edit text and sanitize the input
                 String inputFromEt = mEtLocation.getText().toString().replace(' ','&');
                 loadWeatherData(inputFromEt);
             }
+
             break;
         }
     }
@@ -79,14 +97,21 @@ public class WeatherFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putString("loc",mEtLocation.getText().toString());
         outState.putString("tvTemp",mTvTemp.getText().toString());
         outState.putString("tvHum",mTvHum.getText().toString());
         outState.putString("tvPress",mTvPress.getText().toString());
     }
 
+
+
+
     private void loadWeatherData(String location){
       mFetchWeatherTask.execute(this,location);
     }
+
+
+
     private static class FetchWeatherTask{
         WeakReference<WeatherFragment> weatherFragmentWeakReference;
         private ExecutorService executorService = Executors.newSingleThreadExecutor();

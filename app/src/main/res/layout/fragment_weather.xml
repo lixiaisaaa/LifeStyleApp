@@ -31,6 +31,8 @@
             android:text="Submit"
             android:id="@+id/button_submit"
             />
+
+
     </LinearLayout>
 
     <TextView

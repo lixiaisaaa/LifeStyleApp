@@ -1,8 +1,9 @@
 package com.example.lifestyleapp
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
-import android.widget.*
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 
@@ -13,22 +14,39 @@ class WeatherActivity : AppCompatActivity() , View.OnClickListener{
 
     //private var suggestions_Act = arrayOf("High","Medium","Low")
     private var weatherFragment: Fragment? = null
+    private  var mStringCity: String? = null
+    private  var backButton: Button? = null
     override fun onCreate(savedInstanceState: Bundle?) {
+        val receivedIntent = intent
+
+        mStringCity = receivedIntent.getStringExtra(city_text)
+
+        Log.d("city", "city" +mStringCity.toString())
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_weather)
+
+
         if (savedInstanceState != null) {
             weatherFragment = supportFragmentManager.findFragmentByTag("weather_frag")
         } else {
+            val bundle = Bundle()
+            bundle.putString("city", mStringCity)
             val weatherFragment = WeatherFragment()
+            weatherFragment.arguments = bundle
             val fTrans = supportFragmentManager.beginTransaction()
             fTrans.replace(R.id.fl_frag_weather, weatherFragment, "weather_frag")
             fTrans.commit()
         }
 
-
+        val backButton: Button = findViewById(R.id.button_weatherBack)
+        backButton.setOnClickListener {
+            onBackPressed()
+        }
 
 
     }
+
+
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
