@@ -41,6 +41,7 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
     private var mButtonCamera: Button? = null
     private var mButtonBMR: Button? = null
     private var mButtonPro: Button? = null
+    private var mButtonWeather: Button? = null
     private var mButtonHikes: Button? = null
     private var mButtonCalculate: Button?=null
     private var tv_intake: TextView?= null
@@ -87,7 +88,7 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
         city_Input = findViewById(R.id.et_City)
         imageView = findViewById(R.id.image)
         tv_intake = findViewById(R.id.intake)
-
+        mButtonWeather = findViewById(R.id.button_weather)
         mButtonCamera = findViewById(R.id.button_pic)
         mButtonBMR = findViewById(R.id.button_BMR)
         mButtonPro = findViewById(R.id.button_Profile)
@@ -119,6 +120,11 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
                 // User has already granted location permission, open MapActivity
                 startActivity(Intent(this, realMap::class.java))
             }
+        }
+
+        mButtonWeather!!.setOnClickListener {
+
+            startActivity(Intent(this, WeatherActivity::class.java))
         }
 
     }
@@ -175,9 +181,7 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
 
     override fun onClick(view: View?) {
         when(view?.id){
-            R.id.button_weather->{
 
-            }
             R.id.button_calculate ->{
                 tv_intake = findViewById(R.id.intake)
                 height_Input = findViewById(R.id.et_Height)
