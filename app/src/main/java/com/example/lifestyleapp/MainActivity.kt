@@ -85,6 +85,7 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
 
         activity_Input = findViewById(R.id.autoComplete_act)
         country_Input = findViewById(R.id.et_Country)
+
         city_Input = findViewById(R.id.et_City)
         imageView = findViewById(R.id.image)
         tv_intake = findViewById(R.id.intake)
@@ -123,8 +124,13 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
         }
 
         mButtonWeather!!.setOnClickListener {
-
-            startActivity(Intent(this, WeatherActivity::class.java))
+            if(city_Input!!.text.toString().isNullOrBlank()){
+                Toast.makeText(this@MainActivity, "Please Enter City before checking the weather", Toast.LENGTH_SHORT).show()
+            }else {
+                val messageIntent = Intent(this, WeatherActivity::class.java)
+                messageIntent.putExtra(city_text,mCity)
+                this.startActivity(messageIntent)
+            }
         }
 
     }
