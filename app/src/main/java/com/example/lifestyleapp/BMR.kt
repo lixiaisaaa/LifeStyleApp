@@ -6,8 +6,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
 class BMR : AppCompatActivity() {
-
-
+    // create some global variables
     private var bmrString: String? = null
     private var tv_BMR: TextView? = null
     private var backButton: Button? = null
