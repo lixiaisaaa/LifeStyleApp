@@ -5,12 +5,7 @@
     android:padding="16dp"
     tools:context=".WeatherActivity"
     android:id="@+id/fl_frag_weather"
-
-
     >
-
-
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

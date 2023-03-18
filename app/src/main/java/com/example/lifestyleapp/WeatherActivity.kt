@@ -22,7 +22,7 @@ class WeatherActivity : AppCompatActivity() , View.OnClickListener{
 
         mStringCity = receivedIntent.getStringExtra(city_text)
 
-        Log.d("city", "city" +mStringCity.toString())
+        Log.d("city", "city" + mStringCity.toString())
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_weather)
 

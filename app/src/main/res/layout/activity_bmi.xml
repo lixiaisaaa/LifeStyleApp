@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/background"
     tools:context=".BMR">
 
     <TextView
@@ -17,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="BMI"
-        android:textSize="100dp" />
+        android:textSize="70dp" />
 
     <Button
         android:id="@+id/button_back1"
