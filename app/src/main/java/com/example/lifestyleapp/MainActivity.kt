@@ -65,6 +65,9 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
         ,"Moderately active (moderate exercise/work 3-5 days per week)","Very active (hard exercise/work 6-7 days a week)",
     "Extra active (very hard exercise/work 6-7 days a week)")
 
+    // Weathe database
+
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

@@ -1,5 +1,7 @@
 package com.example.lifestyleapp;
 
+import androidx.room.Entity;
+
 public class WeatherData {
     private LocationData mLocationData;
     private CurrentCondition mCurrentCondition = new CurrentCondition();
