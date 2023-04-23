@@ -13,6 +13,7 @@ import android.view.View
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -68,6 +69,8 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
 
     // database
     private lateinit var userViewModel: UserViewModel
+
+
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -290,6 +293,7 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
                 }else{
                     // Create a User object and insert it into the database
                     val user = UserData(
+                        id  = 1,
                         name = mStringName!!,
                         height = mHeight!!,
                         weight = mWeight!!,
