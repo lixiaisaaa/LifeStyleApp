@@ -39,7 +39,7 @@ public class WeatherFragment extends Fragment implements View.OnClickListener{
     private Button mBtSubmit;
 
     private WeatherViewModel mWeatherViewModel;
-    private static FetchWeatherTask mFetchWeatherTask = new FetchWeatherTask();
+
 
 
     public WeatherFragment() {
@@ -79,7 +79,7 @@ public class WeatherFragment extends Fragment implements View.OnClickListener{
         mEtLocation.setText(strCity);
 
 
-        mFetchWeatherTask.setWeakReference(this); //make sure we're always pointing to current version of fragment
+
         mBtSubmit = (Button) view.findViewById(R.id.button_submit);
         mBtSubmit.setOnClickListener(this);
 
@@ -138,53 +138,5 @@ public class WeatherFragment extends Fragment implements View.OnClickListener{
 
 
 
-    private static class FetchWeatherTask{
-        WeakReference<WeatherFragment> weatherFragmentWeakReference;
-        private ExecutorService executorService = Executors.newSingleThreadExecutor();
-        private Handler mainThreadHandler = HandlerCompat.createAsync(Looper.getMainLooper());
 
-        public void setWeakReference(WeatherFragment ref)
-        {
-            weatherFragmentWeakReference = new WeakReference<WeatherFragment>(ref);
-        }
-        public void execute(WeatherFragment ref, String location){
-
-            executorService.execute(new Runnable(){
-                @Override
-                public void run(){
-                    String jsonWeatherData;
-                    URL weatherDataURL = NetworkUtils.buildURLFromString(location);
-                    jsonWeatherData = null;
-                    try{
-                        jsonWeatherData = NetworkUtils.getDataFromURL(weatherDataURL);
-                        postToMainThread(jsonWeatherData);
-                    }catch(Exception e){
-                        e.printStackTrace();
-                    }
-                }
-            });
-        }
-
-        private void postToMainThread(String jsonWeatherData)
-        {
-            WeatherFragment localRef = weatherFragmentWeakReference.get();
-            mainThreadHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    if (jsonWeatherData != null) {
-                        try {
-                            localRef.mWeatherData = JSONWeatherUtils.getWeatherData(jsonWeatherData);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        if (localRef.mWeatherData != null) {
-                            localRef.mTvTemp.setText("" + Math.round(localRef.mWeatherData.getTemperature().getTemp() - 273.15) + " C");
-                            localRef.mTvHum.setText("" + localRef.mWeatherData.getCurrentCondition().getHumidity() + "%");
-                            localRef.mTvPress.setText("" + localRef.mWeatherData.getCurrentCondition().getPressure() + " hPa");
-                        }
-                    }
-                }
-            });
-        }
-    }
 }
