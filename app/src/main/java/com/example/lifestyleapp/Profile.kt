@@ -8,6 +8,7 @@ import androidx.lifecycle.Observer
 import androidx.activity.viewModels
 
 
+
 class Profile : AppCompatActivity() {
     private var mStringName: String? = null
     private var mStringAge: String? = null
@@ -46,14 +47,14 @@ class Profile : AppCompatActivity() {
         val userId = 0 // Replace with the actual user ID
         userViewModel.setUserId(userId)
         userViewModel.getUser(userId).observe(this, Observer { user ->
-            age_Input.text = user.age.toString()
-            country_Input.text = user.country
-            city_Input.text = user.city
-            name_Input.text = user.name
-            height_Input.text = user.height.toString()
-            weight_Input.text = user.weight.toString()
-            sex_Input.text = user.sex
-            activity_Input.text = user.activityLevel
+            age_Input?.text = user.age.toString()
+            country_Input?.text = user.country
+            city_Input?.text = user.city
+            name_Input?.text = user.name
+            height_Input?.text = user.height.toString()
+            weight_Input?.text = user.weight.toString()
+            sex_Input?.text = user.sex
+            activity_Input?.text = user.activityLevel
         })
 
         backBottom = findViewById(R.id.button_back2)
