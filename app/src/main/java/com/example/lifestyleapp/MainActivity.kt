@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 
 const val age_text = "AG_TEXT"
@@ -144,6 +145,40 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
 
         // Initialize UserViewModel
         userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+
+        val userId = 1 // Replace with the actual user ID
+        userViewModel.setUserId(userId)
+        userViewModel.getUser(userId).observe(this, Observer { user ->
+            age_Input?.setText(user.age.toString())
+            country_Input?.setText(user.country)
+            city_Input?.setText(user.city)
+            name_Input?.setText(user.name)
+            height_Input?.setText(user.height.toString())
+            weight_Input?.setText(user.weight.toString())
+            if(user.sex == "Male"){
+                sex_Input!!.setSelection(0)
+            }else{
+                sex_Input!!.setSelection(1)
+            }
+
+
+
+            if(user.activityLevel == "Sedentary (little or no exercise)"){
+                activity_Input!!.setSelection(0)
+            }else if(user.activityLevel == "SLightly active (light exercise/work 1-3 days per week)"){
+                activity_Input!!.setSelection(1)
+            }
+        else if(user.activityLevel == "Moderately active (moderate exercise/work 3-5 days per week)"){
+            activity_Input!!.setSelection(2)
+        }
+        else if(user.activityLevel == "Very active (hard exercise/work 6-7 days a week)"){
+            activity_Input!!.setSelection(3)
+        }
+            else if(user.activityLevel == "Extra active (very hard exercise/work 6-7 days a week)"){
+                activity_Input!!.setSelection(4)
+            }
+
+        })
 
 
     }
@@ -327,34 +362,28 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
                 mSexual = sex_Input!!.selectedItem.toString()
                 mStringAge = age_Input!!.text.toString()
 
-                var weightV = 0.0
-                var heightV = 0.0
-                var ageV = 0.0
-                if(mWeight != ""){
-                    weightV = mWeight!!.toDouble()
-                }
-                if(mHeight != ""){
-                    heightV = mHeight!!.toDouble()
-                }
-                if(mStringAge != ""){
-                    ageV = mStringAge!!.toDouble()
-                }
-                var bmr = ""
+
+                var userInserted = false
+                val userId = 1 // Replace with the actual user ID
+                userViewModel.setUserId(userId)
+                userViewModel.getUser(userId).observe(this, Observer { user ->
+                 if(user != null && mStringAge == user.age.toString() && mSexual == user.sex
+                     && user.height.toString() == mHeight && user.weight.toString() == mWeight){
+                     userInserted = true
+                 }
 
 
-                if(mHeight.isNullOrBlank() || mWeight.isNullOrBlank() || mStringAge.isNullOrBlank() || mSexual.isNullOrBlank()){
-                    Toast.makeText(this@MainActivity, "enter all height, weight, age and sex", Toast.LENGTH_SHORT).show()
+
+                if(!userInserted || mHeight.isNullOrBlank() || mWeight.isNullOrBlank() || mStringAge.isNullOrBlank() || mSexual.isNullOrBlank()){
+                    Toast.makeText(this@MainActivity, "enter all height, weight, age and sex and click on profile", Toast.LENGTH_SHORT).show()
                 }else{
-                    if(mSexual == "Male"){
-                        bmr = String.format("%.3f", 88.362 + (13.397 * weightV) + (4.799* heightV) - (5.677*ageV))
-                    }else if(mSexual == "Female"){
-                        bmr = String.format("%.3f", 447.593 + (9.247 * weightV) + (3.098* heightV) - (4.330*ageV))
-                    }
+
                     Toast.makeText(this@MainActivity, "Welcome!\"", Toast.LENGTH_SHORT).show()
                     val messageIntent = Intent(this, BMR::class.java)
-                    messageIntent.putExtra("BMR", bmr)
+
                     this.startActivity(messageIntent)
                 }
+                })
 
 
             }
