@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
+import androidx.lifecycle.ViewModelProvider
 
 const val age_text = "AG_TEXT"
 const val name_text = "NM_TEXT"
@@ -65,8 +66,8 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
         ,"Moderately active (moderate exercise/work 3-5 days per week)","Very active (hard exercise/work 6-7 days a week)",
     "Extra active (very hard exercise/work 6-7 days a week)")
 
-    // Weathe database
-
+    // database
+    private lateinit var userViewModel: UserViewModel
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -134,6 +135,13 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
                 this.startActivity(messageIntent)
             }
         }
+
+
+
+
+        // Initialize UserViewModel
+        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+
 
     }
 
@@ -278,19 +286,31 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
 
                 if(mStringName.isNullOrBlank()){
                     Toast.makeText(this@MainActivity, "at least enter your name", Toast.LENGTH_SHORT).show()
+
                 }else{
+                    // Create a User object and insert it into the database
+                    val user = UserData(
+                        name = mStringName!!,
+                        height = mHeight!!,
+                        weight = mWeight!!,
+                        sex = mSexual!!,
+                        age = mStringAge!!,
+                        city = mCity!!,
+                        country = mCountry!!,
+                        activityLevel = mlvl!!
+                    )
+
+                    userViewModel.insertUser(user).observe(this) { userId ->
+                        Toast.makeText(this@MainActivity, "User inserted with ID: $userId", Toast.LENGTH_SHORT).show()
+
+                    }
                     Toast.makeText(this@MainActivity, "Welcome!\"", Toast.LENGTH_SHORT).show()
-                    val messageIntent = Intent(this, Profile::class.java)
-                    messageIntent.putExtra(name_text,mStringName)
-                    messageIntent.putExtra(height_text,mHeight)
-                    messageIntent.putExtra(weight_text,mWeight)
-                    messageIntent.putExtra(sex_text,mSexual)
-                    messageIntent.putExtra(age_text,mStringAge)
-                    messageIntent.putExtra(city_text,mCity)
-                    messageIntent.putExtra(country_text,mCountry)
-                    messageIntent.putExtra(activity_text,mlvl)
+                        val messageIntent = Intent(this, Profile::class.java)
+
                     this.startActivity(messageIntent)
                 }
+
+
             }
             R.id.button_BMR ->{
                 height_Input = findViewById(R.id.et_Height)

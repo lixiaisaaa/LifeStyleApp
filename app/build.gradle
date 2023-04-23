@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
+    apply plugin: 'kotlin-kapt'
 }
 
 android {
@@ -52,4 +53,16 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0"
     //added for room
     annotationProcessor 'androidx.room:room-compiler:2.5.1'
+
+    //view model
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1'
+
+
+    // LiveData
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.1'
+
+    // Room
+    implementation 'androidx.room:room-runtime:2.5.1'
+    kapt 'androidx.room:room-compiler:2.5.1'
+
 }
