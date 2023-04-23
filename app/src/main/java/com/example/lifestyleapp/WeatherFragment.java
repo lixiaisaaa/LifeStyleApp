@@ -6,6 +6,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.os.HandlerCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+
 import android.util.Log;
 import android.os.Handler;
 import android.os.Looper;
@@ -35,6 +38,7 @@ public class WeatherFragment extends Fragment implements View.OnClickListener{
     private WeatherData mWeatherData;
     private Button mBtSubmit;
 
+    private WeatherViewModel mWeatherViewModel;
     private static FetchWeatherTask mFetchWeatherTask = new FetchWeatherTask();
 
 
@@ -78,8 +82,30 @@ public class WeatherFragment extends Fragment implements View.OnClickListener{
         mFetchWeatherTask.setWeakReference(this); //make sure we're always pointing to current version of fragment
         mBtSubmit = (Button) view.findViewById(R.id.button_submit);
         mBtSubmit.setOnClickListener(this);
+
+
+        //Create the view model
+        mWeatherViewModel = new ViewModelProvider(this).get(WeatherViewModel.class);
+
+        //Set the observer
+        (mWeatherViewModel.getData()).observe(getViewLifecycleOwner(),nameObserver);
+
+
         return view;
     }
+
+    //create an observer that watches the LiveData<WeatherData> object
+    final Observer<WeatherData> nameObserver  = new Observer<WeatherData>() {
+        @Override
+        public void onChanged(@Nullable final WeatherData weatherData) {
+            // Update the UI if this data variable changes
+            if(weatherData!=null) {
+                mTvTemp.setText("" + Math.round(weatherData.getTemperature().getTemp() - 273.15) + " C");
+                mTvHum.setText("" + weatherData.getCurrentCondition().getHumidity() + "%");
+                mTvPress.setText("" + weatherData.getCurrentCondition().getPressure() + " hPa");
+            }
+        }
+    };
     @Override
     public void onClick(View view) {
 
@@ -107,7 +133,7 @@ public class WeatherFragment extends Fragment implements View.OnClickListener{
 
 
     private void loadWeatherData(String location){
-      mFetchWeatherTask.execute(this,location);
+        mWeatherViewModel.setLocation(location);
     }
 
 
