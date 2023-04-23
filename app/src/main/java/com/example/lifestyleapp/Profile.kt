@@ -31,6 +31,8 @@ class Profile : AppCompatActivity() {
     private var backBottom: Button? = null
 
     private val userViewModel: UserViewModel by viewModels()
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
@@ -44,7 +46,7 @@ class Profile : AppCompatActivity() {
 //        mCity = receivedIntent.getStringExtra(city_text)!!.replace("^\\s+".toRegex(), "")
 //        mlvl = receivedIntent.getStringExtra(activity_text)!!.replace("^\\s+".toRegex(), "")
 
-        val userId = 0 // Replace with the actual user ID
+        val userId = 1 // Replace with the actual user ID
         userViewModel.setUserId(userId)
         userViewModel.getUser(userId).observe(this, Observer { user ->
             age_Input?.text = user.age.toString()
