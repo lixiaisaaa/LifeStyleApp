@@ -1,33 +1,25 @@
-package com.example.lifestyleapp;
+package com.example.lifestyleapp
 
-import android.app.Application;
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 
-import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
+class WeatherViewModel(application: Application?) : AndroidViewModel(
+    application!!
+) {
+    private val jsonData: MutableLiveData<WeatherData>
+    private val mWeatherRepository: WeatherRepository
 
-import org.json.JSONException;
-
-import java.io.IOException;
-import java.net.URL;
-
-public class WeatherViewModel extends AndroidViewModel {
-    private MutableLiveData<WeatherData> jsonData;
-    private WeatherRepository mWeatherRepository;
-
-    public WeatherViewModel(Application application){
-        super(application);
-        mWeatherRepository = WeatherRepository.getInstance(application);
-        jsonData = mWeatherRepository.getData();
-    }
-    public void setLocation(String location){
-
-        mWeatherRepository.setLocation(location);
+    init {
+        mWeatherRepository = WeatherRepository.getInstance(application!!)
+        jsonData = mWeatherRepository.getData()
     }
 
-    public LiveData<WeatherData> getData(){
-        return jsonData;
+    fun setLocation(location: String?) {
+        mWeatherRepository.setLocation(location!!)
     }
 
-
+    val data: LiveData<WeatherData>
+        get() = jsonData
 }

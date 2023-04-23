@@ -1,87 +1,70 @@
-package com.example.lifestyleapp;
+package com.example.lifestyleapp
 
-import android.app.Application;
-import android.os.Handler;
-import android.os.Looper;
+import android.app.Application
+import androidx.lifecycle.MutableLiveData
+import kotlinx.coroutines.*
+import org.json.JSONException
+import java.io.IOException
+import java.net.URL
 
-import androidx.core.os.HandlerCompat;
-import androidx.lifecycle.MutableLiveData;
+class WeatherRepository private constructor(private val application: Application) {
+    private val jsonData: MutableLiveData<WeatherData> = MutableLiveData()
+    private var mLocation: String? = null
 
-import org.json.JSONException;
-
-import java.io.IOException;
-import java.lang.ref.WeakReference;
-import java.net.URL;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-public class WeatherRepository {
-    private static WeatherRepository instance;
-    private final MutableLiveData<WeatherData> jsonData =
-            new MutableLiveData<WeatherData>();
-    private String mLocation;
-
-    private WeatherRepository(Application application){
-        if(mLocation!=null)
-            loadData();
+    init {
+        mLocation?.let { loadData() }
     }
 
-    public static synchronized WeatherRepository getInstance(Application application){
-        if(instance==null){
-            instance = new WeatherRepository(application);
+    companion object {
+        private var instance: WeatherRepository? = null
+
+        @Synchronized
+        fun getInstance(application: Application): WeatherRepository {
+            if (instance == null) {
+                instance = WeatherRepository(application)
+            }
+            return instance!!
         }
-        return instance;
     }
 
-
-    public void setLocation(String location){
-        mLocation = location;
-        loadData();
+    fun setLocation(location: String) {
+        mLocation = location
+        loadData()
     }
 
-    public MutableLiveData<WeatherData> getData() {
-        return jsonData;
+    fun getData(): MutableLiveData<WeatherData> {
+        return jsonData
     }
 
-    private void loadData(){
-        new FetchWeatherTask().execute(mLocation);
+    private fun loadData() {
+        mLocation?.let { FetchWeatherTask().execute(it) }
     }
-    private class FetchWeatherTask{
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        Handler mainThreadHandler = HandlerCompat.createAsync(Looper.getMainLooper());
-        public void execute(String location)
-        {
-            executorService.execute(new Runnable(){
-                @Override
-                public void run(){
-                    String jsonWeatherData;
-                    URL weatherDataURL = NetworkUtils.buildURLFromString(location);
-                    jsonWeatherData = null;
-                    try{
-                        jsonWeatherData = NetworkUtils.getDataFromURL(weatherDataURL);
-                        if(jsonWeatherData!=null)
-                            postToMainThread(jsonWeatherData);
-                    }catch(Exception e){
-                        e.printStackTrace();
-                    }
+
+    private inner class FetchWeatherTask {
+        private val coroutineScope = CoroutineScope(Dispatchers.IO)
+
+        fun execute(location: String) {
+            coroutineScope.launch {
+                val weatherDataURL = NetworkUtils.buildURLFromString(location)
+                val jsonWeatherData = try {
+                    NetworkUtils.getDataFromURL(weatherDataURL)
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                    null
                 }
-            });
+
+                jsonWeatherData?.let { postToMainThread(it) }
+            }
         }
 
-        private void postToMainThread(String retrievedJsonData)
-        {
-            mainThreadHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        jsonData.setValue(JSONWeatherUtils.getWeatherData(retrievedJsonData));
-                    }catch(JSONException e){
-                        e.printStackTrace();
-                    }
+        private fun postToMainThread(retrievedJsonData: String) {
+            CoroutineScope(Dispatchers.Main).launch {
+                try {
+                    jsonData.value = JSONWeatherUtils.getWeatherData(retrievedJsonData)
+                } catch (e: JSONException) {
+                    e.printStackTrace()
                 }
-            });
+            }
         }
     }
-
-
 }
