@@ -215,11 +215,13 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
         outState.putString(activity_text,mlvl)
         outState.putString(activity_textView,mIntake)
 
-
-        if(imageView!!.drawable != null){
+/*
+        if(imageView != null){
             outState.putParcelable("BITMAP",imageView!!.drawable.toBitmap())
         }
         //outState.putParcelable("BITMAP",mBitmap)
+
+ */
     }
 
     fun getBitmapFromBytes(byteArray: ByteArray): Bitmap {
