@@ -149,35 +149,34 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
         val userId = 1 // Replace with the actual user ID
         userViewModel.setUserId(userId)
         userViewModel.getUser(userId).observe(this, Observer { user ->
-            age_Input?.setText(user.age.toString())
-            country_Input?.setText(user.country)
-            city_Input?.setText(user.city)
-            name_Input?.setText(user.name)
-            height_Input?.setText(user.height.toString())
-            weight_Input?.setText(user.weight.toString())
-            if(user.sex == "Male"){
-                sex_Input!!.setSelection(0)
-            }else{
-                sex_Input!!.setSelection(1)
+            if (user != null) {
+                age_Input?.setText(user.age.toString())
+                country_Input?.setText(user.country)
+                city_Input?.setText(user.city)
+                name_Input?.setText(user.name)
+                height_Input?.setText(user.height.toString())
+                weight_Input?.setText(user.weight.toString())
+                if (user.sex == "Male") {
+                    sex_Input!!.setSelection(0)
+                } else {
+                    sex_Input!!.setSelection(1)
+                }
+
+
+
+                if (user.activityLevel == "Sedentary (little or no exercise)") {
+                    activity_Input!!.setSelection(0)
+                } else if (user.activityLevel == "SLightly active (light exercise/work 1-3 days per week)") {
+                    activity_Input!!.setSelection(1)
+                } else if (user.activityLevel == "Moderately active (moderate exercise/work 3-5 days per week)") {
+                    activity_Input!!.setSelection(2)
+                } else if (user.activityLevel == "Very active (hard exercise/work 6-7 days a week)") {
+                    activity_Input!!.setSelection(3)
+                } else if (user.activityLevel == "Extra active (very hard exercise/work 6-7 days a week)") {
+                    activity_Input!!.setSelection(4)
+                }
+
             }
-
-
-
-            if(user.activityLevel == "Sedentary (little or no exercise)"){
-                activity_Input!!.setSelection(0)
-            }else if(user.activityLevel == "SLightly active (light exercise/work 1-3 days per week)"){
-                activity_Input!!.setSelection(1)
-            }
-        else if(user.activityLevel == "Moderately active (moderate exercise/work 3-5 days per week)"){
-            activity_Input!!.setSelection(2)
-        }
-        else if(user.activityLevel == "Very active (hard exercise/work 6-7 days a week)"){
-            activity_Input!!.setSelection(3)
-        }
-            else if(user.activityLevel == "Extra active (very hard exercise/work 6-7 days a week)"){
-                activity_Input!!.setSelection(4)
-            }
-
         })
 
 
