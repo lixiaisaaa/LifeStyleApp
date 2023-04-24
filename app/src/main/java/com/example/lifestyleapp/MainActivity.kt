@@ -5,6 +5,8 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -20,6 +22,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import java.io.ByteArrayOutputStream
 
 const val age_text = "AG_TEXT"
 const val name_text = "NM_TEXT"
@@ -71,8 +74,10 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
     // database
     private lateinit var userViewModel: UserViewModel
 
-
-    
+//    val imageView = findViewById<ImageView>(R.id.image)
+    var bitmap : Bitmap? = null
+    var imageByteArray : ByteArray?= null
+    var immutableBitmap : Bitmap? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -102,6 +107,8 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
         mButtonPro = findViewById(R.id.button_Profile)
         mButtonHikes = findViewById(R.id.button_hikes)
         mButtonCalculate = findViewById(R.id.button_calculate)
+
+
 
         takePicLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) {
             Log.d("MainActivity", "onCreate: uri=$it, ")
@@ -156,6 +163,9 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
                 name_Input?.setText(user.name)
                 height_Input?.setText(user.height.toString())
                 weight_Input?.setText(user.weight.toString())
+
+                imageView?.setImageBitmap(user.image?.let { getBitmapFromBytes(it) })
+
                 if (user.sex == "Male") {
                     sex_Input!!.setSelection(0)
                 } else {
@@ -210,6 +220,16 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
             outState.putParcelable("BITMAP",imageView!!.drawable.toBitmap())
         }
         //outState.putParcelable("BITMAP",mBitmap)
+    }
+
+    fun getBitmapFromBytes(byteArray: ByteArray): Bitmap {
+        return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+    }
+
+    fun getBytesFromBitmap(bitmap: Bitmap): ByteArray {
+        val stream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+        return stream.toByteArray()
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -311,6 +331,7 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
                 country_Input = findViewById(R.id.et_Country)
                 city_Input = findViewById(R.id.et_City)
                 activity_Input = findViewById(R.id.autoComplete_act)
+                imageView = findViewById(R.id.image)
 
                 mStringName = name_Input!!.text.toString()
                 mHeight = height_Input!!.text.toString()
@@ -321,10 +342,20 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
                 mCountry = country_Input!!.text.toString()
                 mlvl = activity_Input!!.selectedItem.toString()
 
+
+
                 if(mStringName.isNullOrBlank()){
                     Toast.makeText(this@MainActivity, "at least enter your name", Toast.LENGTH_SHORT).show()
 
                 }else{
+                    imageByteArray = (imageView.drawable as? BitmapDrawable)?.bitmap?.let { bitmap ->
+                        getBytesFromBitmap(bitmap)
+                    } ?: run {
+                        null
+                    }
+//                    bitmap = (imageView.drawable as BitmapDrawable).bitmap
+//                    immutableBitmap = drawable.bitmap
+//                    imageByteArray = getBytesFromBitmap(immutableBitmap)
                     // Create a User object and insert it into the database
                     val user = UserData(
                         id  = 1,
@@ -335,7 +366,8 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
                         age = mStringAge!!,
                         city = mCity!!,
                         country = mCountry!!,
-                        activityLevel = mlvl!!
+                        activityLevel = mlvl!!,
+                        image = imageByteArray
                     )
 
                     userViewModel.insertUser(user).observe(this) { userId ->

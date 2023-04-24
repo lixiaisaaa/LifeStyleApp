@@ -13,5 +13,6 @@ data class UserData(
     val sex: String,
     val country: String,
     val city: String,
-    val activityLevel: String
+    val activityLevel: String,
+    val image: ByteArray? = null
 )
