@@ -142,7 +142,7 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
                 Toast.makeText(this@MainActivity, "Please Enter City before checking the weather", Toast.LENGTH_SHORT).show()
             }else {
                 val messageIntent = Intent(this, WeatherActivity::class.java)
-                messageIntent.putExtra(city_text,city_Input!!.text.toString())
+
                 this.startActivity(messageIntent)
             }
         }
