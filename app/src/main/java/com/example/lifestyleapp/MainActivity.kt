@@ -46,6 +46,7 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
     private var mButtonCamera: Button? = null
     private var mButtonBMR: Button? = null
     private var mButtonPro: Button? = null
+    private var mButtonLoad: Button? = null
     private var mButtonWeather: Button? = null
     private var mButtonHikes: Button? = null
     private var mButtonCalculate: Button?=null
@@ -105,6 +106,9 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
         mButtonCamera = findViewById(R.id.button_pic)
         mButtonBMR = findViewById(R.id.button_BMR)
         mButtonPro = findViewById(R.id.button_Profile)
+
+        mButtonLoad = findViewById(R.id.button_Load)
+
         mButtonHikes = findViewById(R.id.button_hikes)
         mButtonCalculate = findViewById(R.id.button_calculate)
 
@@ -119,6 +123,44 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
         mButtonBMR!!.setOnClickListener(this)
         mButtonPro!!.setOnClickListener(this)
         mButtonCalculate!!.setOnClickListener(this)
+        mButtonLoad!!.setOnClickListener{
+            val userId = 1 // Replace with the actual user ID
+            userViewModel.setUserId(userId)
+            userViewModel.getUser(userId).observe(this, Observer { user ->
+                if (user != null) {
+                    age_Input?.setText(user.age.toString())
+                    country_Input?.setText(user.country)
+                    city_Input?.setText(user.city)
+                    name_Input?.setText(user.name)
+                    height_Input?.setText(user.height.toString())
+                    weight_Input?.setText(user.weight.toString())
+
+                    imageView?.setImageBitmap(user.image?.let { getBitmapFromBytes(it) })
+
+                    if (user.sex == "Male") {
+                        sex_Input!!.setSelection(0)
+                    } else {
+                        sex_Input!!.setSelection(1)
+                    }
+
+
+
+                    if (user.activityLevel == "Sedentary (little or no exercise)") {
+                        activity_Input!!.setSelection(0)
+                    } else if (user.activityLevel == "SLightly active (light exercise/work 1-3 days per week)") {
+                        activity_Input!!.setSelection(1)
+                    } else if (user.activityLevel == "Moderately active (moderate exercise/work 3-5 days per week)") {
+                        activity_Input!!.setSelection(2)
+                    } else if (user.activityLevel == "Very active (hard exercise/work 6-7 days a week)") {
+                        activity_Input!!.setSelection(3)
+                    } else if (user.activityLevel == "Extra active (very hard exercise/work 6-7 days a week)") {
+                        activity_Input!!.setSelection(4)
+                    }
+
+                }
+            })
+
+        }
 
         imageView.setOnClickListener {
             takePicLauncher.launch("image/*")
@@ -148,46 +190,10 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
         }
 
 
-
-
         // Initialize UserViewModel
         userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
-        val userId = 1 // Replace with the actual user ID
-        userViewModel.setUserId(userId)
-        userViewModel.getUser(userId).observe(this, Observer { user ->
-            if (user != null) {
-                age_Input?.setText(user.age.toString())
-                country_Input?.setText(user.country)
-                city_Input?.setText(user.city)
-                name_Input?.setText(user.name)
-                height_Input?.setText(user.height.toString())
-                weight_Input?.setText(user.weight.toString())
 
-                imageView?.setImageBitmap(user.image?.let { getBitmapFromBytes(it) })
-
-                if (user.sex == "Male") {
-                    sex_Input!!.setSelection(0)
-                } else {
-                    sex_Input!!.setSelection(1)
-                }
-
-
-
-                if (user.activityLevel == "Sedentary (little or no exercise)") {
-                    activity_Input!!.setSelection(0)
-                } else if (user.activityLevel == "SLightly active (light exercise/work 1-3 days per week)") {
-                    activity_Input!!.setSelection(1)
-                } else if (user.activityLevel == "Moderately active (moderate exercise/work 3-5 days per week)") {
-                    activity_Input!!.setSelection(2)
-                } else if (user.activityLevel == "Very active (hard exercise/work 6-7 days a week)") {
-                    activity_Input!!.setSelection(3)
-                } else if (user.activityLevel == "Extra active (very hard exercise/work 6-7 days a week)") {
-                    activity_Input!!.setSelection(4)
-                }
-
-            }
-        })
 
 
     }
@@ -199,38 +205,29 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
         mStringAge = age_Input!!.text.toString()
         mHeight = height_Input!!.text.toString()
         mWeight = weight_Input!!.text.toString()
-        mSexual = sex_Input!!.toString()
+        //mSexual = sex_Input!!.text.toString()
         mCountry = country_Input!!.text.toString()
         mCity = city_Input!!.text.toString()
-        mlvl = activity_Input!!.toString()
+        //mlvl = activity_Input!!.text.toString()
         mIntake = tv_intake!!.text.toString()
-        imageByteArray = (imageView.drawable as? BitmapDrawable)?.bitmap?.let { bitmap ->
-            getBytesFromBitmap(bitmap)
-        } ?: run {
-            null
-        }
 
-        val user = UserData(
-            id  = 1,
-            name = mStringName!!,
-            height = mHeight!!,
-            weight = mWeight!!,
-            sex = mSexual!!,
-            age = mStringAge!!,
-            city = mCity!!,
-            country = mCountry!!,
-            activityLevel = mlvl!!,
-            image = imageByteArray
-        )
+        outState.putString(name_text,mStringName)
+        outState.putString(age_text,mStringAge)
+        outState.putString(height_text,mHeight)
+        outState.putString(weight_text,mWeight)
+        outState.putString(sex_text,mSexual)
+        outState.putString(country_text,mCountry)
+        outState.putString(city_text,mCity)
+        outState.putString(activity_text,mlvl)
+        outState.putString(activity_textView,mIntake)
 
-        userViewModel.insertUser(user).observe(this) { userId ->}
-/*
+
         if(imageView != null){
             outState.putParcelable("BITMAP",imageView!!.drawable.toBitmap())
         }
         //outState.putParcelable("BITMAP",mBitmap)
 
- */
+
     }
 
     fun getBitmapFromBytes(byteArray: ByteArray): Bitmap {
@@ -255,46 +252,6 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
         //activity_Input!!.setText(savedInstanceState.getString(activity_text))
         tv_intake!!.text = savedInstanceState.getString(activity_textView)
 
-
-        // Initialize UserViewModel
-
-
-        val userId = 1 // Replace with the actual user ID
-        userViewModel.setUserId(userId)
-        userViewModel.getUser(userId).observe(this, Observer { user ->
-            if (user != null) {
-                age_Input?.setText(user.age.toString())
-                country_Input?.setText(user.country)
-                city_Input?.setText(user.city)
-                name_Input?.setText(user.name)
-                height_Input?.setText(user.height.toString())
-                weight_Input?.setText(user.weight.toString())
-
-                imageView?.setImageBitmap(user.image?.let { getBitmapFromBytes(it) })
-
-                if (user.sex == "Male") {
-                    sex_Input!!.setSelection(0)
-                } else {
-                    sex_Input!!.setSelection(1)
-                }
-
-
-
-                if (user.activityLevel == "Sedentary (little or no exercise)") {
-                    activity_Input!!.setSelection(0)
-                } else if (user.activityLevel == "SLightly active (light exercise/work 1-3 days per week)") {
-                    activity_Input!!.setSelection(1)
-                } else if (user.activityLevel == "Moderately active (moderate exercise/work 3-5 days per week)") {
-                    activity_Input!!.setSelection(2)
-                } else if (user.activityLevel == "Very active (hard exercise/work 6-7 days a week)") {
-                    activity_Input!!.setSelection(3)
-                } else if (user.activityLevel == "Extra active (very hard exercise/work 6-7 days a week)") {
-                    activity_Input!!.setSelection(4)
-                }
-
-            }
-        })
-
         if(Build.VERSION.SDK_INT >= 33){
             imageView!!.setImageBitmap(savedInstanceState.getParcelable("BITMAP", Bitmap::class.java))
         }else{
@@ -305,6 +262,8 @@ class MainActivity : AppCompatActivity() ,View.OnClickListener{
 
     override fun onClick(view: View?) {
         when(view?.id){
+
+
 
             R.id.button_calculate ->{
                 tv_intake = findViewById(R.id.intake)
